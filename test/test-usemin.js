@@ -429,6 +429,37 @@ describe('useminPrepare', function () {
     assert.deepEqual(uglify.generated.files[0].src, [path.normalize('.tmp/concat/scripts/foo.js')]);
   });
 
+
+  it('should allow for custom search paramaters for js and css, using blade template for testing ', function () {
+    grunt.log.muted = true;
+    grunt.config.init();
+    grunt.config('useminPrepare', {
+      html: 'index.html',
+      options: {
+        customSearch: /{!!\s+HTML::(style|script)\('(\S+)'\)\s+!!}/
+      }
+    });
+    grunt.file.copy(path.join(__dirname, 'fixtures/block_with_blade_template_includes.html'), 'index.html');
+    grunt.task.run('useminPrepare');
+    grunt.task.start();
+
+    var concat = grunt.config('concat');
+
+    assert.ok(concat);
+    assert.ok(concat.generated.files);
+    assert.equal(concat.generated.files.length, 2);
+
+    assert.equal(concat.generated.files[1].dest, path.normalize('.tmp/concat/scripts/plugins.js'));
+    assert.equal(concat.generated.files[1].src.length, 13);
+    assert.equal(concat.generated.files[0].dest, path.normalize('.tmp/concat/styles/main.min.css'));
+    assert.equal(concat.generated.files[0].src.length, 1);
+
+    var uglify = grunt.config('uglify');
+
+    assert.equal(uglify.generated.files[0].dest, path.normalize('dist/scripts/plugins.js'));
+    assert.deepEqual(uglify.generated.files[0].src, [path.normalize('.tmp/concat/scripts/plugins.js')]);
+  });
+
   describe('absolute path', function () {
     // This is an interesting test case: root file is foo, html file is in foo/build and js
     // sources in foo/scripts

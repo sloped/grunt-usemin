@@ -157,6 +157,7 @@ module.exports = function (grunt) {
     var dest = options.dest || 'dist';
     var staging = options.staging || '.tmp';
     var root = options.root;
+    var customSearch = options.customSearch;
 
     grunt.verbose
       .writeln('Going through ' + grunt.log.wordlist(this.filesSrc) + ' to update the config')
@@ -185,7 +186,7 @@ module.exports = function (grunt) {
     this.filesSrc.forEach(function (filepath) {
       var config;
       try {
-        config = c.process(filepath, grunt.config());
+        config = c.process(filepath, grunt.config(), customSearch);
       } catch (e) {
         grunt.fail.warn(e);
       }

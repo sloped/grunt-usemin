@@ -183,6 +183,23 @@ Default: `nil`
 
 The root directory from which your files will be resolved.
 
+### customSearch
+
+Type: 'regex'  
+Default: Empty
+
+A custom regular expression for creating configurations based on scripts and styles included using non standard methods. 
+
+For example:
+
+The Blade template language in Laravel 5 generated script tags with this syntax. 
+
+```html
+{!! HTML::script('scripts/vendor/bootstrap/bootstrap-button.js') !!}
+```
+
+This option allows you to pass in a regular expression to find scripts included using this method to generate your config. 
+
 ### flow
 
 Type: 'object'  
